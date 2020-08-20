@@ -3,7 +3,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline, FeatureUnion
 from sklearn.preprocessing import OneHotEncoder, FunctionTransformer, StandardScaler
-from transformers import DataFrameConverter, HourParser, SafetyFeatureEngineering
+from transformers import DataFrameConverter, HourParser, SafetyEncoder
 from sklearn.ensemble import RandomForestClassifier
 
 def build_pipeline_numerical(numerical_features):
@@ -90,7 +90,7 @@ def build_pipeline(numerical_features, categorical_features, cyclical_features):
 
     return Pipeline([
         ('hour_parser', HourParser()),
-        ('safety_feature_engineering', SafetyFeatureEngineering()),
+        ('safety_encoder', SafetyEncoder()),
         ('preprocessing', preprocessor),
         ('rf_classifier', RandomForestClassifier(class_weight='balanced'))
     ])

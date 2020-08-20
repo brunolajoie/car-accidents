@@ -23,7 +23,7 @@ class DataFrameConverter(TransformerMixin):
         else:
             return pd.DataFrame(X_)
 
-class SafetyFeatureEngineering(TransformerMixin):
+class SafetyEncoder(TransformerMixin):
     
     def __init__(self):
         pass
@@ -36,7 +36,7 @@ class SafetyFeatureEngineering(TransformerMixin):
         X_ = X.copy()
 
         X_['safety_equipment'] = X_['secu'].map(lambda x: str(round(x))[0])
-        X_['is_safety_equipment'] = X_.secu.map(lambda x: str(round(x))[1])
+        X_['is_safety_equipment'] = X_['secu'].map(lambda x: str(round(x))[1])
 
         return X_.drop(columns=['secu'])
 
