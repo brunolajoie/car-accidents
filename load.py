@@ -12,7 +12,7 @@ def build_dataset(datapath):
     # Merge caracteristics and places on 'Num_Acc'
     data = cara.merge(places, on='Num_Acc')
 
-    # Create a common key to merge users amd vehicles on
+    # Create a common key to merge users and vehicles on
     users['Num_Acc_num_veh'] = users['Num_Acc'].map(lambda x: str(x)) + users['num_veh']
     vehicles['Num_Acc_num_veh'] = vehicles['Num_Acc'].map(lambda x: str(x)) + vehicles['num_veh']
     
