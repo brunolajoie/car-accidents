@@ -5,20 +5,20 @@ from load import build_dataset, clean_dataset
 from pipeline import build_pipeline
 from utils import binarize_target
 
-DATAPATH = 'data_training/'
+DATAPATH = 'data/data_training/'
 
 USELESS_FEATURES = [
-    'locp', 'actp', 'etatp', 'v2', 'lat', 'long', 'gps', 
-    'pr1', 'pr', 'v1', 'adr', 'voie', 'index_x', 'Num_Acc', 
-    'Num_Acc_num_veh', 'Num_Acc', 'num_veh', 'index_y', 
+    'locp', 'actp', 'etatp', 'v2', 'lat', 'long', 'gps',
+    'pr1', 'pr', 'v1', 'adr', 'voie', 'index_x', 'Num_Acc',
+    'Num_Acc_num_veh', 'Num_Acc', 'num_veh', 'index_y',
     'jour', 'an', 'dep', 'com', 'env1'
 ]
 
 NUMERICAL_FEATURES = ['nbv', 'senc', 'an_nais', 'occutc', 'lartpc', 'larrout']
 
 CATEGORICAL_FEATURES = [
-    'hour_of_day', 'is_safety_equipment', 'safety_equipment', 'surf', 'prof', 
-    'place', 'manv', 'circ', 'lum', 'catv', 'obsm', 'infra', 'agg', 'atm', 'catr', 
+    'hour_of_day', 'is_safety_equipment', 'safety_equipment', 'surf', 'prof',
+    'place', 'manv', 'circ', 'lum', 'catv', 'obsm', 'infra', 'agg', 'atm', 'catr',
     'situ', 'obs', 'vosp', 'catu', 'int', 'trajet', 'sexe', 'plan', 'choc', 'col'
 ]
 

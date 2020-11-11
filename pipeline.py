@@ -14,7 +14,7 @@ def build_pipeline_numerical(numerical_features):
         ('scaler', StandardScaler())
     ]
 
-    # Use ColumnTransformer to specify the columns that will be preprocessed. 
+    # Use ColumnTransformer to specify the columns that will be preprocessed.
     preprocessor = ColumnTransformer([
         ('imputer_scaler', Pipeline(steps), numerical_features)
     ])
@@ -23,7 +23,7 @@ def build_pipeline_numerical(numerical_features):
     return Pipeline([
         ('preprocessing', preprocessor),
         ('conversion', DataFrameConverter(column_names=numerical_features))
-    ])    
+    ])
 
 def build_pipeline_categorical(categorical_features):
 
@@ -39,7 +39,7 @@ def build_pipeline_categorical(categorical_features):
         ('imputer_encoder', Pipeline(steps), categorical_features)
     ])
 
-    # Same here, we could just return `preprocessor` but let us say we want to 
+    # Same here, we could just return `preprocessor` but let us say we want to
     # work with a DataFrame.
     return Pipeline([
         ('preprocessing', preprocessor),
@@ -48,16 +48,29 @@ def build_pipeline_categorical(categorical_features):
 
 def build_pipeline_cyclical(cyclical_features):
 
+    def converter(df, sin_or_cos):
+        for feature in df.columns:
+            if feature == 'hour_of_day':
+                perdiod = 24
+            if feature == 'mois':
+                perdiod = 12
+            else:
+                perdiod = 1000 # simulate a non-cyclical feature
+        if sin_or_cos == 'sin':
+            return np.sin(2 * math.pi / perdiod * df)
+        else:
+            return np.cos(2 * math.pi / perdiod * df)
+
     # Remember that ColumnTransformer applies each processing step in parallel.
     preprocessor = ColumnTransformer([
-        ('sin_transform', FunctionTransformer(np.sin), cyclical_features),
-        ('cos_transform', FunctionTransformer(np.cos), cyclical_features),
+        ('sin_transform', FunctionTransformer(lambda df: converter(df, 'sin')), cyclical_features),
+        ('cos_transform', FunctionTransformer(lambda df: converter(df, 'cos')), cyclical_features),
     ])
-    
+
     # You MUST know how ColumnTransformer transforms your input so you can
     # rename your columns.
     column_names = (
-        [feature_name + '_sin' for feature_name in cyclical_features] + 
+        [feature_name + '_sin' for feature_name in cyclical_features] +
         [feature_name + '_cos' for feature_name in cyclical_features]
     )
 
@@ -81,7 +94,7 @@ def build_pipeline(numerical_features, categorical_features, cyclical_features):
         "categorical": build_pipeline_categorical(categorical_features=categorical_features),
         "cyclical": build_pipeline_cyclical(cyclical_features=cyclical_features)
     }
-    
+
     preprocessor = FeatureUnion([
         ("preprocessing_num", pipes["numerical"]),
         ("preprocessing_cat", pipes["categorical"]),
